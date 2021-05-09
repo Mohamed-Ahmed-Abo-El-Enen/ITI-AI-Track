@@ -11,13 +11,27 @@ public class PyramidCSVDAO
     public List<Pyramid> readPyramidsFromCSV(String filePath)
     {
         List<Pyramid> pyramids = new ArrayList<>();
-        try
-        {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while ((line = bufferedReader.readLine()) != null) {
-                pyramids.add(createPyramid(line.split(",")));
-            }
+        try {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run()
+                {
+                    try {
+
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+                        String line = bufferedReader.readLine();
+                        while ((line = bufferedReader.readLine()) != null) {
+                            pyramids.add(createPyramid(line.split(",")));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+            thread.join();
         }
         catch (Exception ex)
         {
