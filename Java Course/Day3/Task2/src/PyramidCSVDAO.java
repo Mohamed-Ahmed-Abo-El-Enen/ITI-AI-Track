@@ -12,22 +12,18 @@ public class PyramidCSVDAO
     {
         List<Pyramid> pyramids = new ArrayList<>();
         try {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run()
-                {
-                    try {
+            Thread thread = new Thread(() -> {
+                try {
 
-                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-                        String line = bufferedReader.readLine();
-                        while ((line = bufferedReader.readLine()) != null) {
-                            pyramids.add(createPyramid(line.split(",")));
-                        }
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+                    String line = bufferedReader.readLine();
+                    while ((line = bufferedReader.readLine()) != null) {
+                        pyramids.add(createPyramid(line.split(",")));
                     }
-                    catch (Exception ex)
-                    {
-                        ex.printStackTrace();
-                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
                 }
             });
             thread.start();
